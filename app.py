@@ -354,7 +354,7 @@ with tab1:
                     key="visual_price_chart"
                 )
             else:
-            st.info("👈 Upload an image on the left and click **Scan & Compare Prices**.")
+                st.info("👈 Upload an image on the left and click **Scan & Compare Prices**.")
 
 
 # TAB 2: MANUAL SEARCH MODE
