@@ -8,9 +8,9 @@ import plotly.express as px
 import os
 import glob
 
-# ---------------------------------------------------------
+
 # 1. Page Config & CSS Theme
-# ---------------------------------------------------------
+
 st.set_page_config(
     page_title="BillCutter - Visual Price Intelligence",
     page_icon="🛍️",
@@ -18,7 +18,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Premium Custom CSS
+
+
 st.markdown("""
 <style>
     .stApp {
@@ -78,32 +79,23 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-MAPPING_FILE = os.path.join(BASE_DIR, "Mapping_Database.xlsx")
-PRODUCT_FILE = os.path.join(BASE_DIR, "Product_Database.xlsx")
-IMAGE_DIR = os.path.join(BASE_DIR, "product_images")
+MAPPING_FILE = "Mapping_Database.xlsx"
+PRODUCT_FILE = "Product_Database.xlsx"
+IMAGE_DIR = "product_images"
 
 # State Management
+
 if "selected_product_info" not in st.session_state:
     st.session_state.selected_product_info = None
 
-# ---------------------------------------------------------
 # 2. Excel Database Loaders
-# ---------------------------------------------------------
+
 @st.cache_data
 def load_excel_databases():
-    if not os.path.exists(MAPPING_FILE):
-        st.error(f"Mapping file not found: {MAPPING_FILE}")
+    if not os.path.exists(MAPPING_FILE) or not os.path.exists(PRODUCT_FILE):
         return None, None
-
-    if not os.path.exists(PRODUCT_FILE):
-        st.error(f"Product file not found: {PRODUCT_FILE}")
-        return None, None
-
     df_map = pd.read_excel(MAPPING_FILE)
     df_prod = pd.read_excel(PRODUCT_FILE)
-
     return df_map, df_prod
 
 df_map, df_prod = load_excel_databases()
@@ -141,9 +133,9 @@ def get_product_details(query_str):
         "market_data": stores
     }
 
-# ---------------------------------------------------------
+
 # 3. AI Deep Learning Engine
-# ---------------------------------------------------------
+
 @st.cache_resource
 def load_feature_extractor():
     weights = MobileNet_V2_Weights.DEFAULT
@@ -173,7 +165,7 @@ def extract_features(pil_image):
 def build_price_chart(stores, best_store):
     df = pd.DataFrame(list(stores.items()), columns=["Store Platform", "Price Structure"])
     
-    # Palette: Green for Best Deal, Modern Indigo/Violet shades for others
+    
     color_palette = ['#6366F1', '#3B82F6', '#8B5CF6', '#EC4899', '#06B6D4', '#F59E0B']
     
     color_map = {}
@@ -247,9 +239,9 @@ def find_best_visual_match(uploaded_image):
             
     return best_ref_key, highest_similarity
 
-# ---------------------------------------------------------
+
 # 4. Header & Clean Sidebar
-# ---------------------------------------------------------
+
 st.markdown("<div class='main-title'>🛍️ BillCutter </div>", unsafe_allow_html=True)
 st.markdown("<div class='sub-title'> Multi-Store Shopping Assistant </div>", unsafe_allow_html=True)
 st.markdown(
@@ -259,7 +251,7 @@ st.markdown(
     "</p>", 
     unsafe_allow_html=True
 )
-# Clean Sidebar - About Section
+# Sidebar - About Section
 st.sidebar.markdown(" ℹ️ About : ")
 st.sidebar.info(
     """
@@ -273,14 +265,13 @@ st.sidebar.info(
 st.sidebar.markdown("---")
 st.sidebar.caption("Created by **Piya** 🎓")
 
-# ---------------------------------------------------------
 # 5. Dual Mode Navigation Tabs
-# ---------------------------------------------------------
+
 tab1, tab2 = st.tabs(["📸 Visual AI Search Mode", "🔍 Manual Product Search Mode"])
 
-# ---------------------------------------------------------
+
 # TAB 1: VISUAL SEARCH MODE
-# ---------------------------------------------------------
+
 with tab1:
     col_left, col_right = st.columns([4, 6], gap="large")
     
@@ -304,10 +295,7 @@ with tab1:
                         st.session_state.selected_product_info = info
                         st.success(f"🎯 **Visual Match Found:** `{info['title']}` ({match_percentage}% Confidence)")
                     else:
-                        st.error(f"Matched key: '{best_key}'")
-                        st.error(f"Product DB loaded: {df_prod is not None}")
-                        if df_prod is not None:
-                            st.write("Product names:", df_prod["Product_Name"].astype(str).tolist())
+                        st.error(f"Matched `{best_key}`, but item is missing in Product Excel DB.")
                 else:
                     st.session_state.selected_product_info = None
                     st.error(f"⚠️ Low confidence match ({match_percentage}%). Reference image missing in catalog.")
@@ -347,9 +335,9 @@ with tab1:
         else:
             st.info("👈 Upload an image on the left and click **Scan & Compare Prices**.")
 
-# ---------------------------------------------------------
+
 # TAB 2: MANUAL SEARCH MODE
-# ---------------------------------------------------------
+
 with tab2:
     st.markdown("#### 🔍 Direct Catalog Lookup")
     
