@@ -296,9 +296,9 @@ with tab1:
                         st.success(f"🎯 **Visual Match Found:** `{info['title']}` ({match_percentage}% Confidence)")
                     else:
                         st.error(f"Matched key: '{best_key}'")
-st.error(f"Product DB loaded: {df_prod is not None}")
-if df_prod is not None:
-    st.write("Product names:", df_prod["Product_Name"].astype(str).tolist())
+                        st.error(f"Product DB loaded: {df_prod is not None}")
+                        if df_prod is not None:
+                            st.write("Product names:", df_prod["Product_Name"].astype(str).tolist())
                 else:
                     st.session_state.selected_product_info = None
                     st.error(f"⚠️ Low confidence match ({match_percentage}%). Reference image missing in catalog.")
