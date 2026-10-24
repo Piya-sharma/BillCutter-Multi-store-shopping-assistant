@@ -1,7 +1,6 @@
-Streamlit
-PyTorch
-TorchVision
-MobileNetV2
-Pandas
-Plotly
+streamlit
+torch
+torchvision
+pandas
+plotly
 Pillow
