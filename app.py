@@ -78,9 +78,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-MAPPING_FILE = "Mapping_Database.xlsx"
-PRODUCT_FILE = "Product_Database.xlsx"
-IMAGE_DIR = "product_images"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MAPPING_FILE = os.path.join(BASE_DIR, "Mapping_Database.xlsx")
+PRODUCT_FILE = os.path.join(BASE_DIR, "Product_Database.xlsx")
+IMAGE_DIR = os.path.join(BASE_DIR, "product_images")
 
 # State Management
 if "selected_product_info" not in st.session_state:
@@ -91,10 +93,17 @@ if "selected_product_info" not in st.session_state:
 # ---------------------------------------------------------
 @st.cache_data
 def load_excel_databases():
-    if not os.path.exists(MAPPING_FILE) or not os.path.exists(PRODUCT_FILE):
+    if not os.path.exists(MAPPING_FILE):
+        st.error(f"Mapping file not found: {MAPPING_FILE}")
         return None, None
+
+    if not os.path.exists(PRODUCT_FILE):
+        st.error(f"Product file not found: {PRODUCT_FILE}")
+        return None, None
+
     df_map = pd.read_excel(MAPPING_FILE)
     df_prod = pd.read_excel(PRODUCT_FILE)
+
     return df_map, df_prod
 
 df_map, df_prod = load_excel_databases()
