@@ -79,7 +79,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 MAPPING_FILE = "Mapping_Database.xlsx"
-PRODUCT_FILE = "Product_Database_Professional.xlsx"
+PRODUCT_FILE = "Product_Database.xlsx"
 IMAGE_DIR = "product_images"
 
 # State Management
