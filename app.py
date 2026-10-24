@@ -90,13 +90,32 @@ if "selected_product_info" not in st.session_state:
 
 # 2. Excel Database Loaders
 
+
 @st.cache_data
 def load_excel_databases():
-    if not os.path.exists(MAPPING_FILE) or not os.path.exists(PRODUCT_FILE):
+    st.write("App folder:", os.path.dirname(os.path.abspath(__file__)))
+    st.write("Current folder files:", os.listdir(os.path.dirname(os.path.abspath(__file__))))
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    mapping_path = os.path.join(base_dir, "Mapping_Database.xlsx")
+    product_path = os.path.join(base_dir, "Product_Database.xlsx")
+
+    if not os.path.isfile(mapping_path):
+        st.error(f"Mapping file missing: {mapping_path}")
         return None, None
-    df_map = pd.read_excel(MAPPING_FILE)
-    df_prod = pd.read_excel(PRODUCT_FILE)
-    return df_map, df_prod
+
+    if not os.path.isfile(product_path):
+        st.error(f"Product file missing: {product_path}")
+        return None, None
+
+    try:
+        df_map = pd.read_excel(mapping_path)
+        df_prod = pd.read_excel(product_path)
+        return df_map, df_prod
+    except Exception as e:
+        st.error(f"Excel loading error: {e}")
+        return None, None
+
 
 df_map, df_prod = load_excel_databases()
 
