@@ -348,8 +348,12 @@ with tab1:
                 st.markdown("<br>", unsafe_allow_html=True)
                 
                 fig = build_price_chart(stores, best_store)
-                st.plotly_chart(fig, use_container_width=True)
-        else:
+                st.plotly_chart(
+                    fig,
+                    use_container_width=True,
+                    key="visual_price_chart"
+                )
+            else:
             st.info("👈 Upload an image on the left and click **Scan & Compare Prices**.")
 
 
@@ -396,4 +400,8 @@ with tab2:
                 st.markdown("<br>", unsafe_allow_html=True)
                 
                 fig = build_price_chart(stores, best_store)
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(
+                    fig,
+                    use_container_width=True,
+                    key="manual_price_chart"
+                )
