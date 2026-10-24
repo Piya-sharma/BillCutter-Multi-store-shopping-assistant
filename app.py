@@ -93,8 +93,6 @@ if "selected_product_info" not in st.session_state:
 
 @st.cache_data
 def load_excel_databases():
-    st.write("App folder:", os.path.dirname(os.path.abspath(__file__)))
-    st.write("Current folder files:", os.listdir(os.path.dirname(os.path.abspath(__file__))))
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
     mapping_path = os.path.join(base_dir, "Mapping_Database.xlsx")
