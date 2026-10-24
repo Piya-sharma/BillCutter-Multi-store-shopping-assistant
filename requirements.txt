@@ -4,3 +4,4 @@ torchvision
 pandas
 plotly
 Pillow
+openpyxl
